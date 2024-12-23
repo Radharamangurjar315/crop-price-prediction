@@ -9,14 +9,15 @@
    text-align: center;
    width: 100vw;
    height: 100vh;
-   background-image: url("/src/assets/homeui2.jpg"); /* Path to your background image */
+   /* background-image: url("/src/assets/homenew.jpeg");  */
+   /* Path to your background image */
    background-size: cover; /* Ensure the image covers the entire background */
    background-position: center; /* Center the image */
    background-repeat: no-repeat; /* Prevent image tiling */
    color: white; /* Adjust text color for better contrast */
    font-family: Arial, sans-serif;
    padding: 20px;
- }
+   }
  .home-container::before {
    content: "";
    position: absolute;
@@ -32,6 +33,8 @@
  h1 {
    font-size: 3rem;
    margin-bottom: 20px;
+   margin-left: 10px;
+   text-align: left;
  }
  
  p {

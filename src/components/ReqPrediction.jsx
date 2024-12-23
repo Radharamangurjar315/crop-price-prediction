@@ -1,175 +1,124 @@
-// import { useState } from "react";
-// import "./PredictionPage.css";
-// import {
-//   Container,
-//   Paper,
-//   Typography,
-//   TextField,
-//   Button,
-//   Box,
-//   MenuItem,
-//   FormControl,
-//   Select,
-//   InputLabel,
-// } from "@mui/material";
+import { useState } from "react";
+import {
+  Container,
+  Paper,
+  Typography,
+  TextField,
+  Button,
+  Box,
+  Alert,
+  CircularProgress
+} from "@mui/material";
+import axios from "axios";
 
-// const CropPredictionForm = () => {
-//   const [formData, setFormData] = useState({
-//     cropType: "",
-//     landArea: "",
-//     soilType: "",
-//     season: "",
-//   });
+const CropPredictionForm = () => {
+  const [formData, setFormData] = useState({
+    N: "",
+    P: "",
+    K: "",
+    temperature: "",
+    humidity: "",
+    ph: "",
+    rainfall: ""
+  });
+  const [prediction, setPrediction] = useState(null);
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
 
-//   const commodities = [
-//     "Wheat",
-//     "Gram",
-//     "Moong",
-//     "Soyabean",
-//     "Rice",
-//     "Maize",
-//     "Sugarcane",
-//     "Bajra",
-//     "Toor(Arhar)",
-//     "Urad",
-//     "Cotton",
-//     "Groundnut",
-//     "Onion",
-//     "Potato",
-//     "Tomato",
-//   ];
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError(null); // Reset error
+    setPrediction(null); // Reset prediction
+    setLoading(true); // Show loading state
 
-//   const soilTypes = [
-//     "Sandy",
-//     "Loamy",
-//     "Clay",
-//     "Silty",
-//     "Peaty",
-//     "Chalky",
-//     "Saline",
-//   ];
+    try {
+      // Make POST request to the Flask API
+      const response = await axios.post("http://127.0.0.1:8080/croppredict", formData);
+      setPrediction(response.data.recommended_crop); // Display prediction result
+    } catch (err) {
+      setError(
+        err.response?.data?.error || "Failed to fetch prediction. Please try again."
+      );
+      console.error(err);
+    } finally {
+      setLoading(false); // Hide loading state
+    }
+  };
 
-//   const seasons = ["Kharif", "Rabi", "Zaid", "Summer", "Winter"];
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value
+    }));
+  };
 
-//   const handleSubmit = (e) => {
-//     e.preventDefault();
-//     console.log("Crop Form submitted:", formData);
-//   };
+  return (
+    <Container maxWidth="md" sx={{ py: 4 }}>
+      <Paper elevation={3}>
+        {/* Header */}
+        <Box sx={{ bgcolor: "#F5DEB3", p: 3, borderRadius: "4px 4px 0 0" }}>
+          <Typography variant="h4" component="h1" align="center" sx={{ color: "#333" }}>
+            Crop Recommendation
+          </Typography>
+        </Box>
 
-//   const handleChange = (e) => {
-//     const { name, value } = e.target;
-//     setFormData((prev) => ({
-//       ...prev,
-//       [name]: value,
-//     }));
-//   };
+        {/* Form */}
+        <Box component="form" onSubmit={handleSubmit} sx={{ p: 3 }}>
+          <Box sx={{ display: "grid", gap: 3 }}>
+            {/* Input Fields */}
+            {[
+              { name: "N", label: "Nitrogen (N)" },
+              { name: "P", label: "Phosphorous (P)" },
+              { name: "K", label: "Potassium (K)" },
+              { name: "temperature", label: "Temperature (°C)" },
+              { name: "humidity", label: "Humidity (%)" },
+              { name: "ph", label: "pH Level" },
+              { name: "rainfall", label: "Rainfall (mm)" }
+            ].map((field) => (
+              <TextField
+                key={field.name}
+                name={field.name}
+                label={field.label}
+                type="number"
+                value={formData[field.name]}
+                onChange={handleChange}
+                fullWidth
+                required
+              />
+            ))}
 
-//   return (
-//     <Container maxWidth="md" sx={{ py: 4 }}>
-//       <Paper elevation={3}>
-//         <Box
-//           sx={{
-//             bgcolor: "success.main",
-//             color: "primary.contrastText",
-//             p: 3,
-//             textAlign: "center",
-//           }}
-//         >
-//           <Typography variant="h4" component="h1" style={{color: "white", fontFamily: "cursive"}}>
-//             Crop Requirement Prediction
-//           </Typography>
-//         </Box>
+            {/* Submit Button */}
+            <Button
+              type="submit"
+              variant="contained"
+              color="success"
+              size="large"
+              fullWidth
+              sx={{ mt: 2 }}
+              disabled={loading}
+            >
+              {loading ? <CircularProgress size={24} /> : "Predict Crop"}
+            </Button>
+          </Box>
+        </Box>
 
-//         <Box component="form" onSubmit={handleSubmit} sx={{ p: 3 }}>
-//           <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
-//             {/* Crop Type Selection */}
-//             <FormControl fullWidth>
-//               <InputLabel>Select Crop Type</InputLabel>
-//               <Select
-//                 name="cropType"
-//                 value={formData.cropType}
-//                 label="Select Crop Type"
-//                 onChange={handleChange}
-//                 required
-//               >
-//                 <MenuItem value="">Select a crop type</MenuItem>
-//                 {commodities.map((commodity) => (
-//                   <MenuItem
-//                     key={commodity.toLowerCase()}
-//                     value={commodity.toLowerCase()}
-//                   >
-//                     {commodity}
-//                   </MenuItem>
-//                 ))}
-//               </Select>
-//             </FormControl>
+        {/* Result Section */}
+        <Box sx={{ p: 3 }}>
+          {error && (
+            <Alert severity="error" sx={{ mb: 2 }}>
+              {error}
+            </Alert>
+          )}
+          {prediction && (
+            <Alert severity="success" sx={{ mb: 2 }}>
+              Recommended Crop: <strong>{prediction}</strong>
+            </Alert>
+          )}
+        </Box>
+      </Paper>
+    </Container>
+  );
+};
 
-//             {/* Land Area */}
-//             <TextField
-//               fullWidth
-//               type="number"
-//               name="landArea"
-//               label="Enter Land Area (in Acres)"
-//               value={formData.landArea}
-//               onChange={handleChange}
-//               required
-//             />
-
-//             {/* Soil Type Selection */}
-//             <FormControl fullWidth>
-//               <InputLabel>Select Soil Type</InputLabel>
-//               <Select
-//                 name="soilType"
-//                 value={formData.soilType}
-//                 label="Select Soil Type"
-//                 onChange={handleChange}
-//                 required
-//               >
-//                 <MenuItem value="">Select soil type</MenuItem>
-//                 {soilTypes.map((soil) => (
-//                   <MenuItem key={soil.toLowerCase()} value={soil.toLowerCase()}>
-//                     {soil}
-//                   </MenuItem>
-//                 ))}
-//               </Select>
-//             </FormControl>
-
-//             {/* Season Selection */}
-//             <FormControl fullWidth>
-//               <InputLabel>Select Season</InputLabel>
-//               <Select
-//                 name="season"
-//                 value={formData.season}
-//                 label="Select Season"
-//                 onChange={handleChange}
-//                 required
-//               >
-//                 <MenuItem value="">Select a season</MenuItem>
-//                 {seasons.map((season) => (
-//                   <MenuItem
-//                     key={season.toLowerCase()}
-//                     value={season.toLowerCase()}
-//                   >
-//                     {season}
-//                   </MenuItem>
-//                 ))}
-//               </Select>
-//             </FormControl>
-
-//             {/* Submit Button */}
-//             <Button
-//               type="submit"
-//               variant="contained"
-//               size="large"
-//               sx={{ mt: 2 }}
-//             >
-//               Predict Crop Yield
-//             </Button>
-//           </Box>
-//         </Box>
-//       </Paper>
-//     </Container>
-//   );
-// };
-
-// export default CropPredictionForm;
+export default CropPredictionForm;

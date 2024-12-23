@@ -136,7 +136,7 @@
 .positive-change::after {
     content: '▲';
     position: absolute;
-    right: 40%;
+    right: 20%;
     top: 50%;
     transform: translateY(-50%);
     font-size: 12px;
@@ -152,7 +152,7 @@
 .negative-change::after {
     content: '▼';
     position: absolute;
-    right: 40%;
+    right: 20%;
     top: 50%;
     transform: translateY(-50%);
     font-size: 12px;

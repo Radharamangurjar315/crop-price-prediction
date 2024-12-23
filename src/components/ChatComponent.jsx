@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { GoogleGenerativeAI } from "@google/generative-ai";
-import { Mic, MicOff, Paperclip, Trash2, X } from 'lucide-react';
+import { Mic, MicOff, Trash2, X } from 'lucide-react';
 import "./ChatComponent.css";
 
 const ChatComponent = () => {
@@ -13,10 +13,8 @@ const ChatComponent = () => {
   const [error, setError] = useState(null);
   const [isExpanded, setIsExpanded] = useState(true);
   const [isRecording, setIsRecording] = useState(false);
-  const [selectedFile, setSelectedFile] = useState(null);
   const chatEndRef = useRef(null);
   const inputRef = useRef(null);
-  const fileInputRef = useRef(null);
 
   // Initialize Gemini API
   const genAI = new GoogleGenerativeAI('AIzaSyAHRwVNpM9r3E3XBBr14nPSy6r8OnLqe5g');
@@ -33,7 +31,7 @@ const ChatComponent = () => {
       const recognition = new window.webkitSpeechRecognition();
       recognition.continuous = true;
       recognition.interimResults = true;
-      recognition.lang = 'en-US';
+      recognition.lang = 'en-US', 'hi-IN';
       
       recognition.onresult = (event) => {
         const transcript = Array.from(event.results)
@@ -69,24 +67,6 @@ const ChatComponent = () => {
     scrollToBottom();
   }, [chatHistory]);
 
-  const handleFileSelect = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      if (file.size > 5 * 1024 * 1024) { // 5MB limit
-        setError('File size must be less than 5MB');
-        return;
-      }
-      setSelectedFile(file);
-    }
-  };
-
-  const removeFile = () => {
-    setSelectedFile(null);
-    if (fileInputRef.current) {
-      fileInputRef.current.value = '';
-    }
-  };
-
   const deleteMessage = (index) => {
     setChatHistory(prev => prev.filter((_, i) => i !== index));
   };
@@ -100,44 +80,23 @@ const ChatComponent = () => {
 
   const sendMessage = async (e) => {
     e.preventDefault();
-    if (!message.trim() && !selectedFile) return;
+    if (!message.trim()) return;
     
     setLoading(true);
     setError(null);
 
-    // Create message content
-    let messageContent = message;
-    let attachmentInfo = '';
-    
-    if (selectedFile) {
-      attachmentInfo = `[Attached file: ${selectedFile.name}] `;
-      messageContent = attachmentInfo + messageContent;
-      
-      // Convert file to base64 if needed
-      const reader = new FileReader();
-      reader.readAsDataURL(selectedFile);
-      await new Promise((resolve) => {
-        reader.onload = () => resolve(reader.result);
-      });
-    }
-
     // Add user message immediately
     const userMessage = { 
       role: 'user', 
-      content: messageContent,
+      content: message,
       timestamp: new Date().toLocaleTimeString(),
-      hasAttachment: !!selectedFile
     };
     setChatHistory(prev => [...prev, userMessage]);
     setMessage('');
-    setSelectedFile(null);
-    if (fileInputRef.current) {
-      fileInputRef.current.value = '';
-    }
 
     try {
       const model = genAI.getGenerativeModel({ model: "gemini-pro" });
-      const result = await model.generateContent(messageContent);
+      const result = await model.generateContent(message);
       const response = await result.response;
       const text = response.text();
 
@@ -168,7 +127,7 @@ const ChatComponent = () => {
       >
         <div className="flex items-center space-x-2 cursor-pointer" onClick={toggleChat}>
           <div className="w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
-          <h3 className="font-semibold">Gemini AI Assistant</h3>
+          <h3 className="font-semibold">Krishi Chat</h3>
         </div>
         <div className="flex items-center space-x-2">
           <button 
@@ -239,21 +198,6 @@ const ChatComponent = () => {
             <div ref={chatEndRef} />
           </div>
 
-          {/* File Preview */}
-          {selectedFile && (
-            <div className="px-4 py-2 bg-gray-50 border-t flex justify-between items-center">
-              <span className="text-sm text-gray-600">
-                {selectedFile.name}
-              </span>
-              <button
-                onClick={removeFile}
-                className="text-red-500 hover:text-red-700"
-              >
-                <X size={16} />
-              </button>
-            </div>
-          )}
-
           {/* Input Form */}
           <form onSubmit={sendMessage} className="p-4 border-t">
             <div className="flex space-x-2">
@@ -266,21 +210,6 @@ const ChatComponent = () => {
                 placeholder="Type your message..."
                 disabled={loading}
               />
-              <input
-                type="file"
-                ref={fileInputRef}
-                onChange={handleFileSelect}
-                className="hidden"
-                accept=".txt,.pdf,.doc,.docx,image/*"
-              />
-              <button
-                type="button"
-                onClick={() => fileInputRef.current?.click()}
-                className="p-2 text-gray-500 hover:text-gray-700"
-                title="Attach file"
-              >
-                <Paperclip size={20} />
-              </button>
               <button
                 type="button"
                 onClick={toggleRecording}
@@ -291,13 +220,15 @@ const ChatComponent = () => {
               </button>
               <button
                 type="submit"
-                disabled={loading || (!message.trim() && !selectedFile)}
+                disabled={loading || (!message.trim())}
                 className="bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-1"
               >
                 {loading ? (
                   <>
                     <span className="animate-spin">↻</span>
                     <span>Sending</span>
+                 
+
                   </>
                 ) : (
                   'Send'

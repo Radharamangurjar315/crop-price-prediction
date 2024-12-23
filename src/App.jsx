@@ -3,7 +3,7 @@ import Navbar from "./components/Navbar";
 import Home from "./components/Home";
 import PredictionPage from "./components/PredictionPage";
 import DashboardPage from "./components/DashboardPage";
-// import ReqPrediction from "./components/ReqPrediction";
+import ReqPrediction from "./components/ReqPrediction";
 import ChatComponent from "./components/ChatComponent";
 import './components/PredictionPage.css';
 import './components/ChatComponent.css';
@@ -24,12 +24,13 @@ function App() {
             <Route path="/DashboardPage" element={<DashboardPage />} />
             <Route path="/Chat" element={<ChatComponent />} />
             <Route path="/Analysis" element={<Analysis />} />
-            <Route path="/Recommendation" element={<Recommendation/>} />
+            
+            <Route path="/Recommendation" element={<><Recommendation/> <ReqPrediction /></>} />
             <Route path="/PredictionPage" element={
               <>
                 <div className="prediction-container">
                   <PredictionPage />
-                  {/* <ReqPrediction /> */}
+                  
                 </div>
               </>
             } />

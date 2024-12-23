@@ -41,7 +41,7 @@ const CombinedAnalysis = () => {
                   <td>{item.Crop}</td>
                   <td className="text-center">{item.Price}</td>
                   <td className={`text-center ${getPriceChangeClass(item.Change)}`}>
-                    {item.Change}%
+                    {item.Change}
                   </td>
                 </tr>
               ))}
@@ -66,7 +66,7 @@ const CombinedAnalysis = () => {
                   <td>{item.Crop}</td>
                   <td className="text-center">{item.Price}</td>
                   <td className={`text-center ${getPriceChangeClass(item.Change)}`}>
-                    {item.Change}%
+                    {item.Change}
                   </td>
                 </tr>
               ))}

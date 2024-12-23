@@ -12,8 +12,8 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
-import AdbIcon from "@mui/icons-material/Adb";
-import "./Navbar.css"; // Import custom CSS for Navbar
+// import AdbIcon from "@mui/icons-material/Adb";
+// import "./Navbar.css"; // Import custom CSS for Navbar
 
 const pages = [
   { name: "Home", path: "/" },
@@ -21,10 +21,9 @@ const pages = [
   { name: "Predictions", path: "/PredictionPage" },
   { name: "Analysis", path: "/Analysis" },
   { name: "Recommendation", path: "/Recommendation" },
-  { name: "Kisaan Anumaan", path: "/Chat" },
+  { name: "Krishi Chat", path: "/Chat" },
   { name: "About", path: "/About" },
   { name: "Contact", path: "/Contact" },
-  
 ];
 const settings = ["Profile", "Account", "Logout"];
 
@@ -54,23 +53,30 @@ function ResponsiveAppBar() {
     <AppBar position="fixed" style={{ backgroundColor: "#50C878" }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <Typography
-            variant="h6"
-            noWrap
-            component="a"
-            href="#"
-            sx={{
-              mr: 2,
-              display: { xs: "none", md: "flex" },
-              fontFamily: "monospace",
-              fontWeight: 700,
-              letterSpacing: ".3rem",
-              color: "inherit",
-              textDecoration: "none",
-            }}
-          >
-            FarmEase
-          </Typography>
+          {/* Logo */}
+          <Box sx={{ display: "flex", alignItems: "center", mr: 2 }}>
+            <img
+              src="src\assets\newLogo.jpeg" // Replace with your logo's path
+              alt="FarmEase Logo"
+              style={{ width: "50px", height: "45px", marginRight: "10px" }}
+            />
+            <Typography
+              variant="h6"
+              noWrap
+              component="a"
+              href="#"
+              sx={{
+                display: { xs: "none", md: "flex" },
+                fontFamily: "monospace",
+                fontWeight: 700,
+                letterSpacing: ".3rem",
+                color: "inherit",
+                textDecoration: "none",
+              }}
+            >
+              KrishiMoolya
+            </Typography>
+          </Box>
 
           {/* Mobile menu icon */}
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
@@ -113,27 +119,6 @@ function ResponsiveAppBar() {
             </Menu>
           </Box>
 
-          <AdbIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
-          <Typography
-            variant="h5"
-            noWrap
-            component="a"
-            href="#"
-            sx={{
-              mr: 2,
-              display: { xs: "flex", md: "none" },
-              flexGrow: 1,
-              fontFamily: "monospace",
-              fontWeight: 700,
-              letterSpacing: ".3rem",
-              color: "inherit",
-              textDecoration: "none",
-            }}
-          >
-            FarmEase
-          </Typography>
-
-          {/* Desktop menu */}
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             {pages.map((page) => (
               <Button
