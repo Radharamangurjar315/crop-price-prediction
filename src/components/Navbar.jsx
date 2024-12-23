@@ -15,13 +15,16 @@ import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
 import "./Navbar.css"; // Import custom CSS for Navbar
 
-// Define the pages and settings that will be displayed in the navigation bar and user menu
 const pages = [
-  { name: "Dashboard", path: "/" },
+  { name: "Home", path: "/" },
+  { name: "Dashboard", path: "/DashboardPage" },
   { name: "Predictions", path: "/PredictionPage" },
-  { name: "Upload", path: "/upload" },
-  { name: "About", path: "/about" },
-  { name: "Contact", path: "/contact" },
+  { name: "Analysis", path: "/Analysis" },
+  { name: "Recommendation", path: "/Recommendation" },
+  { name: "Kisaan Anumaan", path: "/Chat" },
+  { name: "About", path: "/About" },
+  { name: "Contact", path: "/Contact" },
+  
 ];
 const settings = ["Profile", "Account", "Logout"];
 
@@ -48,7 +51,7 @@ function ResponsiveAppBar() {
   };
 
   return (
-    <AppBar position="static">
+    <AppBar position="fixed" style={{ backgroundColor: "#50C878" }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <Typography
@@ -69,6 +72,7 @@ function ResponsiveAppBar() {
             FarmEase
           </Typography>
 
+          {/* Mobile menu icon */}
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
             <IconButton
               size="large"
@@ -129,6 +133,7 @@ function ResponsiveAppBar() {
             FarmEase
           </Typography>
 
+          {/* Desktop menu */}
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             {pages.map((page) => (
               <Button
@@ -141,7 +146,12 @@ function ResponsiveAppBar() {
             ))}
           </Box>
 
-          <Box sx={{ flexGrow: 0 }}>
+          {/* Right section: Google Translate + Avatar */}
+          <Box sx={{ display: "flex", alignItems: "center", gap: "20px" }}>
+            {/* Google Translate Element */}
+            <div id="google_translate_element"></div>
+
+            {/* Avatar and user menu */}
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                 <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
