@@ -10,6 +10,11 @@ import './components/ChatComponent.css';
 import "./components/Home.css";
 import Analysis from "./components/Analysis";
 import Recommendation from "./components/Recommendation";
+import "./components/Recommendation.css";
+import "./components/ReqPrediction.css";
+import OfflineChatbot from "./components/OfflineChatbot";
+import RealTimeNews from "./components/RealTimeNews";
+import "./components/DashboardPage.css";
 
 function App() {
   return (
@@ -21,7 +26,7 @@ function App() {
         <div className="main-content">
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/DashboardPage" element={<DashboardPage />} />
+            <Route path="/DashboardPage" element={<><DashboardPage/><RealTimeNews/></>} />
             <Route path="/Chat" element={<ChatComponent />} />
             <Route path="/Analysis" element={<Analysis />} />
             
@@ -35,6 +40,7 @@ function App() {
               </>
             } />
           </Routes>
+          <OfflineChatbot/>
         </div>
       </div>
     </Router>

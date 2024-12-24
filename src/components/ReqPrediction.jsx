@@ -1,13 +1,13 @@
 import { useState } from "react";
 import {
-  Container,
-  Paper,
-  Typography,
+  Card,
+  CardContent,
   TextField,
   Button,
+  Typography,
   Box,
   Alert,
-  CircularProgress
+  CircularProgress,
 } from "@mui/material";
 import axios from "axios";
 
@@ -19,7 +19,7 @@ const CropPredictionForm = () => {
     temperature: "",
     humidity: "",
     ph: "",
-    rainfall: ""
+    rainfall: "",
   });
   const [prediction, setPrediction] = useState(null);
   const [error, setError] = useState(null);
@@ -33,7 +33,10 @@ const CropPredictionForm = () => {
 
     try {
       // Make POST request to the Flask API
-      const response = await axios.post("http://127.0.0.1:8080/croppredict", formData);
+      const response = await axios.post(
+        "http://127.0.0.1:8080/croppredict",
+        formData
+      );
       setPrediction(response.data.recommended_crop); // Display prediction result
     } catch (err) {
       setError(
@@ -49,75 +52,90 @@ const CropPredictionForm = () => {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
   };
 
   return (
-    <Container maxWidth="md" sx={{ py: 4 }}>
-      <Paper elevation={3}>
-        {/* Header */}
-        <Box sx={{ bgcolor: "#F5DEB3", p: 3, borderRadius: "4px 4px 0 0" }}>
-          <Typography variant="h4" component="h1" align="center" sx={{ color: "#333" }}>
+    <Box
+      sx={{
+        maxWidth: "100vw",
+        height: "100vh",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        background: "linear-gradient(135deg, #f5f7fa, #c3cfe2)",
+        padding: 2,
+      }}
+    >
+      <Card sx={{ width: "90%", maxWidth: 700 }}>
+        <CardContent>
+          <Typography
+            variant="h5"
+            component="div"
+            gutterBottom
+            sx={{ textAlign: "center", mb: 2 }}
+          >
             Crop Recommendation
           </Typography>
-        </Box>
 
-        {/* Form */}
-        <Box component="form" onSubmit={handleSubmit} sx={{ p: 3 }}>
-          <Box sx={{ display: "grid", gap: 3 }}>
-            {/* Input Fields */}
-            {[
-              { name: "N", label: "Nitrogen (N)" },
-              { name: "P", label: "Phosphorous (P)" },
-              { name: "K", label: "Potassium (K)" },
-              { name: "temperature", label: "Temperature (°C)" },
-              { name: "humidity", label: "Humidity (%)" },
-              { name: "ph", label: "pH Level" },
-              { name: "rainfall", label: "Rainfall (mm)" }
-            ].map((field) => (
-              <TextField
-                key={field.name}
-                name={field.name}
-                label={field.label}
-                type="number"
-                value={formData[field.name]}
-                onChange={handleChange}
-                fullWidth
-                required
-              />
-            ))}
-
-            {/* Submit Button */}
-            <Button
-              type="submit"
-              variant="contained"
-              color="success"
-              size="large"
-              fullWidth
-              sx={{ mt: 2 }}
-              disabled={loading}
+          <form onSubmit={handleSubmit}>
+            <Box
+              sx={{
+                display: "grid",
+                gridTemplateColumns: { xs: "1fr", sm: "1fr 1fr" },
+                gap: 2,
+              }}
             >
-              {loading ? <CircularProgress size={24} /> : "Predict Crop"}
-            </Button>
-          </Box>
-        </Box>
+              {/* Input Fields */}
+              {[
+                { name: "N", label: "Nitrogen (N)" },
+                { name: "P", label: "Phosphorous (P)" },
+                { name: "K", label: "Potassium (K)" },
+                { name: "temperature", label: "Temperature (°C)" },
+                { name: "humidity", label: "Humidity (%)" },
+                { name: "ph", label: "pH Level" },
+                { name: "rainfall", label: "Rainfall (mm)" },
+              ].map((field) => (
+                <TextField
+                  key={field.name}
+                  name={field.name}
+                  label={field.label}
+                  type="number"
+                  value={formData[field.name]}
+                  onChange={handleChange}
+                  variant="outlined"
+                  fullWidth
+                />
+              ))}
 
-        {/* Result Section */}
-        <Box sx={{ p: 3 }}>
-          {error && (
-            <Alert severity="error" sx={{ mb: 2 }}>
-              {error}
-            </Alert>
-          )}
+              {/* Submit Button */}
+              <Button
+                variant="contained"
+                color="success"
+                type="submit"
+                fullWidth
+                sx={{ mt: 2 }}
+                disabled={loading}
+              >
+                {loading ? <CircularProgress size={24} /> : "Recommend Crop"}
+              </Button>
+            </Box>
+          </form>
+
+          {/* Result Section */}
+          {error && <Alert severity="error" sx={{ mt: 2 }}>{error}</Alert>}
           {prediction && (
-            <Alert severity="success" sx={{ mb: 2 }}>
-              Recommended Crop: <strong>{prediction}</strong>
-            </Alert>
+            <Box sx={{ mt: 3 }}>
+              <Typography variant="h6" sx={{ textAlign: "center" }}>
+                Recommended Crop:{" "}
+                <Typography component="strong">{prediction}</Typography>
+              </Typography>
+            </Box>
           )}
-        </Box>
-      </Paper>
-    </Container>
+        </CardContent>
+      </Card>
+    </Box>
   );
 };
 

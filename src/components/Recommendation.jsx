@@ -91,7 +91,7 @@ const FertilizerForm = () => {
             gutterBottom
             sx={{ textAlign: "center", mb: 2 }}
           >
-            Fertilizer Recommendation Form
+            Fertilizer Recommendation
           </Typography>
 
           <form onSubmit={handleSubmit}>
@@ -201,14 +201,14 @@ const FertilizerForm = () => {
               sx={{ mt: 2 }}
               disabled={loading}
             >
-              {loading ? "Submitting..." : "Submit"}
+              {loading ? "Submitting..." : "Recommend Ferilizer"}
             </Button>
           </form>
 
           {error && <Alert severity="error" sx={{ mt: 2 }}>{error}</Alert>}
           {result && (
             <Box sx={{ mt: 3 }}>
-              <Typography variant="h6">Fertilizer Recommendation:</Typography>
+              <Typography variant="h6">Recommended Fertilizer</Typography>
               <Typography>{result.fertilizer_recommendation}</Typography>
 
               <Typography variant="h6" sx={{ mt: 2 }}>

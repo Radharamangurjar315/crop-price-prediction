@@ -1,5 +1,5 @@
-import React from "react"; // Import React library
-import { useNavigate } from "react-router-dom"; // Import useNavigate hook for navigation
+import React from "react";
+import { useNavigate } from "react-router-dom";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -12,8 +12,7 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
-// import AdbIcon from "@mui/icons-material/Adb";
-// import "./Navbar.css"; // Import custom CSS for Navbar
+import "./Navbar.css";
 
 const pages = [
   { name: "Home", path: "/" },
@@ -22,15 +21,13 @@ const pages = [
   { name: "Analysis", path: "/Analysis" },
   { name: "Recommendation", path: "/Recommendation" },
   { name: "Krishi Chat", path: "/Chat" },
-  { name: "About", path: "/About" },
-  { name: "Contact", path: "/Contact" },
 ];
 const settings = ["Profile", "Account", "Logout"];
 
 function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
-  const navigate = useNavigate(); // Hook for navigation
+  const navigate = useNavigate();
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -42,7 +39,7 @@ function ResponsiveAppBar() {
 
   const handleCloseNavMenu = (path) => {
     setAnchorElNav(null);
-    if (path) navigate(path); // Navigate to the specified path
+    if (path) navigate(path);
   };
 
   const handleCloseUserMenu = () => {
@@ -50,13 +47,13 @@ function ResponsiveAppBar() {
   };
 
   return (
-    <AppBar position="fixed" style={{ backgroundColor: "#50C878" }}>
+    <AppBar position="fixed" style={{ backgroundColor: "#50C878", zIndex: 1201 }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           {/* Logo */}
           <Box sx={{ display: "flex", alignItems: "center", mr: 2 }}>
             <img
-              src="src\assets\newLogo.jpeg" // Replace with your logo's path
+              src="src/assets/newLogo.jpeg"
               alt="FarmEase Logo"
               style={{ width: "50px", height: "45px", marginRight: "10px" }}
             />
@@ -119,6 +116,7 @@ function ResponsiveAppBar() {
             </Menu>
           </Box>
 
+          {/* Desktop navigation */}
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             {pages.map((page) => (
               <Button
@@ -133,10 +131,7 @@ function ResponsiveAppBar() {
 
           {/* Right section: Google Translate + Avatar */}
           <Box sx={{ display: "flex", alignItems: "center", gap: "20px" }}>
-            {/* Google Translate Element */}
-            <div id="google_translate_element"></div>
-
-            {/* Avatar and user menu */}
+            <div id="google_translate_element" style={{ zIndex: 1000 }}></div>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                 <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />

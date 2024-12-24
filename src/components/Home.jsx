@@ -1,4 +1,3 @@
-
 import Carousel from "react-bootstrap/Carousel";
 import "bootstrap/dist/css/bootstrap.min.css"; // Import Bootstrap CSS for styling
 
@@ -8,21 +7,23 @@ function Home() {
     {
       text: "First slide",
       src: "/src/assets/homenew.jpeg",
-      label: "First slide label",
-      description: "Nulla vitae elit libero, a pharetra augue mollis interdum.",
+      label: "Harvest Analytics",
+      description: "Predicting Prices of Commodities ",
     },
     {
       text: "Second slide",
       src: "/src/assets/homeui3.jpeg",
-      label: "Second slide label",
-      description: "Welcome to Sahayk: Your Farming Companion",
+      label: "Your Smart Agricultural Assistant - Krishi Chat",
+      description: "Krishi Chat is an interactive, farmer-focused chatbot designed to provide real-time assistance and guidance. It serves as a bridge between farmers and agricultural knowledge, offering insights into crop management, market trends, and tailored solutions to agricultural challenges. ",
     },
     {
       text: "Third slide",
       src: "/src/assets/homeui2.jpg",
-      label: "Third slide label",
+      label: "Smart Crop Insights: Grow What Thrives",
       description:
-        "Praesent commodo cursus magna, vel scelerisque nisl consectetur.",
+        "The Crop Recommendation feature empowers farmers by analyzing soil conditions, climatic factors, and regional suitability to suggest the most profitable and sustainable crops to cultivate. With data-driven insights, it ensures optimal resource utilization and maximizes agricultural output.",
+
+
     },
   ];
 

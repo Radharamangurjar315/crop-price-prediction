@@ -20,7 +20,10 @@ const PricePredictionForm = () => {
     state: '',
     district: '',
     crop: '',
-    date: ''
+    date: '',
+    temperature: '',
+    rainfall: '',
+    moisture: ''
   });
 
   const [prediction, setPrediction] = useState(null);
@@ -30,35 +33,14 @@ const PricePredictionForm = () => {
   // Define your state districts
   const districts = {
     "Madhya Pradesh": [
-      "Betul",
-      "Bhopal",
-      "Chhindwara",
-      "Dewas",
-      "Gwalior",
-      "Indore",
-      "Jabalpur",
-      "Khargone",
-      "Ratlam",
-      "Rewa",
-      "Sagar",
-      "Satna",
-      "Shivpuri",
-      "Ujjain",
-      "Vidisha"
+      "Betul", "Bhopal", "Chhindwara", "Dewas", "Gwalior", "Indore", "Jabalpur",
+      "Khargone", "Ratlam", "Rewa", "Sagar", "Satna", "Shivpuri", "Ujjain", "Vidisha"
     ]
   };
 
   // Define your commodities
-  const crop = [
-    'Wheat',
-    'Gram',
-    'Barley',
-    'Rice',
-    'Maize',
-    'Jowar',
-    'Soybean',
-    'Masoor',
-    'Groundnuts'
+  const crops = [
+    'Wheat', 'Gram', 'Barley', 'Rice', 'Maize', 'Jowar', 'Soybean', 'Masoor', 'Groundnuts'
   ];
 
   const handleSubmit = async (e) => {
@@ -73,8 +55,10 @@ const PricePredictionForm = () => {
         date: formData.date,
         crop: formData.crop,
         district: formData.district,
+        temperature: formData.temperature,
+        rainfall: formData.rainfall,
+        moisture: formData.moisture,
       });
-      console.log('Form Data:', formData);
 
       const response = await fetch('http://localhost:5000/predict', {
         method: 'POST',
@@ -87,6 +71,9 @@ const PricePredictionForm = () => {
           date: formData.date,
           crop: formData.crop,
           district: formData.district,
+          temperature: formData.temperature,
+          rainfall: formData.rainfall,
+          moisture: formData.moisture
         }),
       });
 
@@ -127,6 +114,7 @@ const PricePredictionForm = () => {
       ...(name === 'state' ? { districts: '' } : {}), // Reset district when state changes
     }));
   };
+  
 
   // Get today's date for max date restriction
   const today = new Date().toISOString().split('T')[0];
@@ -197,7 +185,7 @@ const PricePredictionForm = () => {
                 label="Select Commodity"
                 onChange={handleChange}
               >
-                {crop.sort().map((crop) => (
+                {crops.sort().map((crop) => (
                   <MenuItem 
                     key={crop} 
                     value={crop}
@@ -222,6 +210,39 @@ const PricePredictionForm = () => {
                 min: today,
                 max: maxDateString
               }}
+            />
+
+            {/* Temperature Input */}
+            <TextField
+              fullWidth
+              required
+              type="number"
+              name="temperature"
+              label="Temperature (°C)"
+              value={formData.temperature}
+              onChange={handleChange}
+            />
+
+            {/* Rainfall Input */}
+            <TextField
+              fullWidth
+              required
+              type="number"
+              name="rainfall"
+              label="Rainfall (mm)"
+              value={formData.rainfall}
+              onChange={handleChange}
+            />
+
+            {/* Moisture Input */}
+            <TextField
+              fullWidth
+              required
+              type="number"
+              name="moisture"
+              label="Moisture (%)"
+              value={formData.moisture}
+              onChange={handleChange}
             />
 
             <Button 
@@ -275,7 +296,8 @@ const PricePredictionForm = () => {
                   Minimum Price
                 </Typography>
                 <Typography variant="h5" color="success.main">
-                  ₹{prediction.predicted_min_price}
+                  ₹{prediction.min_price}
+                  
                 </Typography>
               </Box>
               <Box>
@@ -283,7 +305,7 @@ const PricePredictionForm = () => {
                   Maximum Price
                 </Typography>
                 <Typography variant="h5" color="success.main">
-                  ₹{prediction.predicted_max_price}
+                  ₹{prediction.max_price}
                 </Typography>
               </Box>
             </Box>
